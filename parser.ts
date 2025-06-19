@@ -6,17 +6,16 @@
 //lang
 //say-as
 
-
 type SpeechElement = {
-    type: "pause" | "emphasis" | "prosody" | "voice" | "lang" | "say-as" | "text";
+    type: "text" | "pause" | "emphasis" | "prosody" | "voice" | "lang" | "say-as";
     value: string | number;
 };
 
 
 function splitSSML(ssml: string): string[]{
-    const parts = ssml.split(/(<[^>]+>)/g).filter(part => part.trim() !== "");
+    const parts = ssml.split(/(<[^>]+>)/g).filter(part => part !== "");
     return parts;
-};
+}
 
 
 function parseSSML(ssml: string): SpeechElement[]{
@@ -36,9 +35,9 @@ function parseSSML(ssml: string): SpeechElement[]{
                 result.push({type: "pause", value: time});
             }
         }else if(part.startsWith("<emphasis")){
-            let match = part.match(/level=['"]([\w\-]+)['"]/);
+            let match  = part.match(/level=['"]([\w\-]+)['"]/);
             if(match){
-                let textPart = parts[i + 1]?.trim()
+                let textPart = parts[i + 1]?.trim();
                 result.push({type: "emphasis", value: textPart});
             }
             i++
@@ -59,14 +58,14 @@ function parseSSML(ssml: string): SpeechElement[]{
         }else if(part.startsWith("<lang")){
             let match = part.match(/xml:lang=['"]([\w\-]+)['"]/);
             if(match){
-                let textPart = parts[i + 1]?.trim();
+                let textPart = parts[ i + 1]?.trim();
                 result.push({type: "lang", value: textPart});
             }
             i++
         }else if(part.startsWith("<say-as")){
-            let match = part.match(/interpret-as=['"]([\w\-]+)['"]/);
+            let match = part.match(/nterpret-as=['"]([\w\-]+)['"]/);
             if(match){
-                let textPart = parts[i + 1]?.trim();
+                let textPart = parts[ i + 1]?.trim();
                 result.push({type: "say-as", value: textPart});
             }
             i++
@@ -84,7 +83,6 @@ function parseSSML(ssml: string): SpeechElement[]{
 
 
 
-
 let input = `<speak>
   Welcome to Speechify. 
   <break time="750ms"/> 
@@ -94,7 +92,6 @@ let input = `<speak>
   <lang xml:lang="es-ES">Hola, cómo estás</lang>. 
   <say-as interpret-as="date">2025-06-20</say-as>.
 </speak>`;
-
 
 
 console.log(parseSSML(input));
