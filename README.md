@@ -3,6 +3,8 @@ Build a parser that can convert a subset of SSML (Speech Synthesis Markup Langua
 
 You will receive a string of valid SSML. Your function should return a list of objects representing the content and tags in the correct order. Focus only on the following supported SSML tags:
 
+//new line 
+
 <break time="500ms" />
 
 <emphasis level="strong">
